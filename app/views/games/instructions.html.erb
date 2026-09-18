@@ -1,0 +1,17 @@
+<% content_for :title, "How to run — Rails Runner" %>
+
+<main class="cabinet slim">
+  <p class="conf-mark"><%= @game_session.game_level&.name || "Ruby Valley" %></p>
+  <h1 class="logo small">GET READY</h1>
+  <p class="lede">You are <strong><%= @game_session.player.display_name %></strong>. Survive <%= @config.duration_seconds %> seconds, grab gems, squash nothing that looks like a bug.</p>
+
+  <ul class="how-to">
+    <li><span>LEFT / RIGHT</span> Move. On a phone, use the big pads.</li>
+    <li><span>JUMP</span> Space, up arrow, or the JUMP pad.</li>
+    <li><span>GEMS + TRACKS</span> Collect them. Bugs hurt. Technical debt slows you.</li>
+    <li><span>RUBY QUIZ</span> The run pauses for short Rails questions.</li>
+    <li><span>DEPLOY</span> Reach the flag before the clock hits zero.</li>
+  </ul>
+
+  <%= link_to "START RUN", play_path, class: "btn btn-primary" %>
+</main>

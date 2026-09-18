@@ -1,0 +1,42 @@
+#!/bin/bash
+set -euo pipefail
+
+cd /app
+
+if [ -f tmp/pids/server.pid ]; then
+  rm -f tmp/pids/server.pid
+fi
+
+if [ -f Gemfile ]; then
+  bundle check >/dev/null 2>&1 || bundle install
+fi
+
+if [ -f package.json ]; then
+  npm install --no-fund --no-audit
+fi
+
+if [ -n "${DATABASE_URL:-}" ]; then
+  echo "Waiting for PostgreSQL..."
+  ruby -e '
+    require "uri"
+    uri = URI.parse(ENV.fetch("DATABASE_URL"))
+    abort("DATABASE_URL is missing a host") unless uri.host
+    loop do
+      system("pg_isready", "-q", "-h", uri.host, "-p", (uri.port || 5432).to_s, "-U", uri.user || "postgres")
+      break if $?.success?
+      sleep 1
+    end
+  '
+fi
+
+if [ "${1:-}" = "./bin/dev" ] || [ "${1:-}" = "bin/dev" ] || [ "${1:-}" = "./bin/rails" ] || [ "${1:-}" = "bin/rails" ]; then
+  bundle exec rails db:prepare
+  if [ "${RAILS_ENV:-development}" != "production" ]; then
+    bundle exec rails db:test:prepare >/dev/null 2>&1 || true
+  fi
+  if [ "${SEED_ON_BOOT:-false}" = "true" ] && [ "${RAILS_ENV:-development}" = "development" ]; then
+    bundle exec rails db:seed || echo "Seed failed (will retry on next boot)"
+  fi
+fi
+
+exec "$@"

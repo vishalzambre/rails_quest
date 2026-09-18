@@ -1,0 +1,15 @@
+.git
+log/*
+tmp/*
+node_modules
+public/assets
+public/vite
+public/vite-dev
+coverage
+.env
+.env.*
+!.env.example
+config/master.key
+vendor/bundle
+storage
+.DS_Store

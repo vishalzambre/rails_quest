@@ -1,0 +1,47 @@
+<% content_for :title, "Leaderboard — Rails Runner" %>
+<% content_for :page_class, "tv-board" %>
+<% content_for :vite do %>
+  <%= vite_javascript_tag "leaderboard.ts" %>
+<% end %>
+
+<main class="tv" data-leaderboard data-scope="<%= @scope %>">
+  <header class="tv-head">
+    <p>Deccan Rails Conf</p>
+    <h1>RAILS RUNNER</h1>
+    <p class="tv-sub"><%= @scope == "today" ? "Today's cabinet" : "Conference cabinet" %></p>
+    <nav class="tv-tabs">
+      <%= link_to "CONFERENCE", leaderboard_path, class: (@scope == "conference" ? "on" : nil) %>
+      <%= link_to "TODAY", today_leaderboard_path, class: (@scope == "today" ? "on" : nil) %>
+    </nav>
+  </header>
+
+  <p class="high-banner" data-high-banner hidden>NEW HIGH SCORE!</p>
+
+  <table class="tv-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>PLAYER</th>
+        <th>SCORE</th>
+      </tr>
+    </thead>
+    <tbody data-rows>
+      <% @scores.each_with_index do |score, index| %>
+        <tr data-points="<%= score.points %>">
+          <td><%= index + 1 %></td>
+          <td>
+            <strong><%= score.player.display_name %></strong>
+            <% if score.player.company.present? %>
+              <small><%= score.player.company %></small>
+            <% end %>
+          </td>
+          <td><%= format_score(score.points) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @scores.empty? %>
+    <p class="tv-empty">Waiting for the first deploy…</p>
+  <% end %>
+</main>

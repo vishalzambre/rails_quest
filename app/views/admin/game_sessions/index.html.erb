@@ -1,0 +1,15 @@
+<h1><%= action_name == "suspicious" ? "Suspicious games" : "Games" %></h1>
+<table class="data">
+  <thead><tr><th>Player</th><th>Status</th><th>Score</th><th>Rejected</th><th>Reason</th></tr></thead>
+  <tbody>
+    <% @game_sessions.each do |session| %>
+      <tr>
+        <td><%= link_to session.player.display_name, admin_game_session_path(session) %></td>
+        <td><%= session.status %></td>
+        <td><%= session.score&.points || session.server_score %></td>
+        <td><%= session.rejected_event_count %></td>
+        <td><%= session.invalid_reason %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

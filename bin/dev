@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+if [ -f /.dockerenv ] || [ "${IN_DOCKER:-}" = "1" ]; then
+  exec bundle exec foreman start -f Procfile.dev
+fi
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo "Docker is required to run Rails Runner. Install Docker Desktop and retry."
+  exit 1
+fi
+
+echo "Starting Rails Runner with Docker Compose..."
+exec docker compose up "$@"

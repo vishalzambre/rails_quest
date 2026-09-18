@@ -1,0 +1,10 @@
+<h1><%= @level.name %></h1>
+<%= form_with model: [:admin, @level], class: "arcade-form" do |form| %>
+  <label>Name <%= form.text_field :name %></label>
+  <label>Subtitle <%= form.text_field :subtitle %></label>
+  <label>Description <%= form.text_area :description, rows: 3 %></label>
+  <label>Sort <%= form.number_field :sort_order %></label>
+  <label class="check"><%= form.check_box :active %> Active</label>
+  <label class="check"><%= form.check_box :playable %> Playable in MVP</label>
+  <%= form.submit class: "btn btn-primary" %>
+<% end %>

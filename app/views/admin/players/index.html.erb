@@ -1,0 +1,15 @@
+<h1>Players</h1>
+<table class="data">
+  <thead><tr><th>Name</th><th>GitHub</th><th>Company</th><th>Demo</th><th>Runs</th></tr></thead>
+  <tbody>
+    <% @players.each do |player| %>
+      <tr>
+        <td><%= link_to player.name, admin_player_path(player) %></td>
+        <td><%= player.github_username %></td>
+        <td><%= player.company %></td>
+        <td><%= player.demo? ? "demo" : "" %></td>
+        <td><%= player.game_sessions.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

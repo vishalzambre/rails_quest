@@ -1,0 +1,16 @@
+<h1><%= @question.new_record? ? "New question" : "Edit question" %></h1>
+<%= form_with model: [:admin, @question], class: "arcade-form" do |form| %>
+  <% if @question.errors.any? %>
+    <p class="form-error"><%= @question.errors.full_messages.to_sentence %></p>
+  <% end %>
+  <label>Prompt <%= form.text_area :prompt, required: true, rows: 3 %></label>
+  <label>Category <%= form.select :category, Question::CATEGORIES %></label>
+  <label>Difficulty <%= form.select :difficulty, Question::DIFFICULTIES %></label>
+  <label>Choices, one per line (A. …) <%= form.text_area :choices_text, rows: 6, value: @question.choices_text %></label>
+  <label>Correct key <%= form.text_field :correct_choice_key, required: true %></label>
+  <label>Correct points <%= form.number_field :points %></label>
+  <label>Wrong penalty <%= form.number_field :wrong_points %></label>
+  <label>Explanation <%= form.text_area :explanation, rows: 2 %></label>
+  <label class="check"><%= form.check_box :active %> Active</label>
+  <%= form.submit class: "btn btn-primary" %>
+<% end %>

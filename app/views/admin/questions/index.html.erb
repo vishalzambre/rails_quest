@@ -1,0 +1,19 @@
+<h1>Questions</h1>
+<p><%= link_to "New question", new_admin_question_path, class: "btn btn-primary" %></p>
+<table class="data">
+  <thead><tr><th>Prompt</th><th>Category</th><th>Difficulty</th><th>Active</th><th></th></tr></thead>
+  <tbody>
+    <% @questions.each do |question| %>
+      <tr>
+        <td><%= link_to question.prompt.truncate(80), edit_admin_question_path(question) %></td>
+        <td><%= question.category %></td>
+        <td><%= question.difficulty %></td>
+        <td><%= question.active? ? "yes" : "no" %></td>
+        <td>
+          <%= button_to(question.active? ? "Deactivate" : "Activate", toggle_admin_question_path(question), method: :post, class: "text-btn") %>
+          <%= button_to "Delete", admin_question_path(question), method: :delete, class: "text-btn", form: { data: { turbo_confirm: "Delete question?" } } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

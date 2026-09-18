@@ -1,0 +1,14 @@
+<h1><%= @player.display_name %></h1>
+<p><%= @player.company %> · <%= @player.email.presence || "no email" %> · <%= @player.demo? ? "demo seed" : "live player" %></p>
+<table class="data">
+  <thead><tr><th>Token</th><th>Status</th><th>Score</th></tr></thead>
+  <tbody>
+    <% @sessions.each do |session| %>
+      <tr>
+        <td><%= link_to session.token.truncate(12), admin_game_session_path(session) %></td>
+        <td><%= session.status %></td>
+        <td><%= session.score&.points || session.server_score %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

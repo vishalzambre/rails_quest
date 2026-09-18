@@ -1,0 +1,14 @@
+<h1>Analytics</h1>
+<dl class="result-grid">
+  <% @analytics.except(:most_missed_questions, :devices).each do |key, value| %>
+    <div><dt><%= key.to_s.humanize %></dt><dd><%= value %></dd></div>
+  <% end %>
+</dl>
+<h2>Most missed</h2>
+<ul>
+  <% @analytics[:most_missed_questions].each do |row| %>
+    <li><%= row[:prompt] %> (<%= row[:misses] %>)</li>
+  <% end %>
+</ul>
+<h2>Devices</h2>
+<p>iOS <%= @analytics[:devices][:ios] %> · Android <%= @analytics[:devices][:android] %> · Desktop <%= @analytics[:devices][:desktop] %></p>

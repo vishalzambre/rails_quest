@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= content_for(:title) || "Rails Runner — Deccan Rails Conf" %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#070B1A">
+    <meta name="description" content="Rails Runner, the Deccan Rails Conf arcade. Run. Code. Debug. Deploy.">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag :app %>
+    <%= vite_client_tag %>
+    <%= yield :vite %>
+  </head>
+  <body class="<%= page_classes %>">
+    <div class="scanlines" aria-hidden="true"></div>
+    <%= yield %>
+  </body>
+</html>

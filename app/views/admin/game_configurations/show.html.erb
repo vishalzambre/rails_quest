@@ -1,0 +1,20 @@
+<h1>Scoring &amp; run config</h1>
+<%= form_with model: @config, url: admin_game_configuration_path, method: :patch, class: "arcade-form" do |form| %>
+  <label>Duration (seconds) <%= form.number_field :duration_seconds %></label>
+  <label>Lives <%= form.number_field :lives %></label>
+  <label>Question frequency (seconds) <%= form.number_field :question_frequency_seconds %></label>
+  <label>Max questions <%= form.number_field :max_questions_per_run %></label>
+  <label class="check"><%= form.check_box :difficulty_progression %> Difficulty progression</label>
+  <label>Ruby points <%= form.number_field :ruby_points %></label>
+  <label>Rails points <%= form.number_field :rails_points %></label>
+  <label>Boost points <%= form.number_field :boost_points %></label>
+  <label>Special ruby <%= form.number_field :special_ruby_points %></label>
+  <label>Bug penalty <%= form.number_field :bug_penalty %></label>
+  <label>Production bug penalty <%= form.number_field :production_bug_penalty %></label>
+  <label>Correct question <%= form.number_field :question_correct_points %></label>
+  <label>Wrong question <%= form.number_field :question_wrong_penalty %></label>
+  <label>Completion bonus <%= form.number_field :completion_bonus %></label>
+  <label>Time multiplier <%= form.number_field :time_multiplier %></label>
+  <label class="check"><%= form.check_box :include_demo_on_leaderboard %> Include demo scores</label>
+  <%= form.submit "Save configuration", class: "btn btn-primary" %>
+<% end %>

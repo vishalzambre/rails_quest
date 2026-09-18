@@ -1,0 +1,49 @@
+<% content_for :title, "Rails Runner — Deccan Rails Conf" %>
+
+<main class="cabinet">
+  <p class="conf-mark">Deccan Rails Conf · Hyderabad</p>
+  <h1 class="logo">RAILS<br>RUNNER</h1>
+  <p class="subtitle">Deccan Rails Conf Edition</p>
+  <p class="tagline">Run. Code. Debug. Deploy.</p>
+
+  <div class="hero-stage" aria-hidden="true">
+    <div class="pixel-sky"></div>
+    <div class="tracks"></div>
+    <div class="hero-sprite runner"></div>
+    <div class="hero-sprite gem"></div>
+    <div class="hero-sprite bug"></div>
+  </div>
+
+  <div class="cta-row">
+    <%= link_to "PLAY NOW", register_path, class: "btn btn-primary" %>
+    <%= link_to "LEADERBOARD", leaderboard_path, class: "btn btn-ghost" %>
+  </div>
+
+  <dl class="stat-row">
+    <div>
+      <dt>Best Score Today</dt>
+      <dd><%= format_score(@best_today&.points) %></dd>
+    </div>
+    <div>
+      <dt>Players Played</dt>
+      <dd><%= @players_played %></dd>
+    </div>
+  </dl>
+
+  <% if @top_preview.any? %>
+    <section class="home-board">
+      <h2>Cabinet champions</h2>
+      <ol>
+        <% @top_preview.each_with_index do |score, index| %>
+          <li>
+            <span class="rank"><%= index + 1 %></span>
+            <span class="who"><%= score.player.display_name %></span>
+            <span class="pts"><%= format_score(score.points) %></span>
+          </li>
+        <% end %>
+      </ol>
+    </section>
+  <% end %>
+
+  <p class="legal">Original pixel world · RailsLand · Not affiliated with Nintendo</p>
+</main>

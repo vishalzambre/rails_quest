@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vite-plugin-ruby": "^5.2.4"
+  },
+  "dependencies": {
+    "@rails/actioncable": "^7.2.302",
+    "phaser": "^3.88.2"
+  }
+}

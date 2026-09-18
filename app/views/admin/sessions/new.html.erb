@@ -1,0 +1,6 @@
+<h1>Admin sign-in</h1>
+<%= form_with url: admin_login_path, class: "arcade-form" do %>
+  <label>Username <%= text_field_tag :username, nil, required: true, autocomplete: "username" %></label>
+  <label>Password <%= password_field_tag :password, nil, required: true, autocomplete: "current-password" %></label>
+  <%= submit_tag "Enter", class: "btn btn-primary" %>
+<% end %>

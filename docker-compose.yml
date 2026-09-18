@@ -1,0 +1,67 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rails}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rails}
+      POSTGRES_DB: ${POSTGRES_DB:-rails_quest_development}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rails} -d ${POSTGRES_DB:-rails_quest_development}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      target: development
+    image: rails-runner-web:dev
+    environment:
+      IN_DOCKER: "1"
+      RAILS_ENV: ${RAILS_ENV:-development}
+      PORT: "3000"
+      BINDING: "0.0.0.0"
+      DATABASE_URL: ${DATABASE_URL:-postgres://rails:rails@db:5432/rails_quest_development}
+      TEST_DATABASE_URL: ${TEST_DATABASE_URL:-postgres://rails:rails@db:5432/rails_quest_test}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme}
+      APP_HOST: ${APP_HOST:-http://localhost:3000}
+      CONFERENCE_SLUG: ${CONFERENCE_SLUG:-deccan-rails-conf}
+      SEED_ON_BOOT: ${SEED_ON_BOOT:-true}
+    ports:
+      - "${PORT:-3000}:3000"
+      - "3036:3036"
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+      - node_modules:/app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  bundle:
+  node_modules:

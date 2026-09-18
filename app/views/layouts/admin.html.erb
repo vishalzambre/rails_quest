@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Admin — Rails Runner</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag :app %>
+  </head>
+  <body class="admin <%= page_classes %>">
+    <% if admin_signed_in? %>
+      <header class="admin-bar">
+        <a href="<%= admin_root_path %>" class="admin-mark">Rails Runner Admin</a>
+        <nav>
+          <a href="<%= admin_players_path %>">Players</a>
+          <a href="<%= admin_questions_path %>">Questions</a>
+          <a href="<%= admin_game_levels_path %>">Levels</a>
+          <a href="<%= admin_game_configuration_path %>">Scoring</a>
+          <a href="<%= admin_game_sessions_path %>">Games</a>
+          <a href="<%= suspicious_admin_game_sessions_path %>">Suspicious</a>
+          <a href="<%= admin_leaderboard_path %>">Leaderboard</a>
+          <a href="<%= admin_analytics_path %>">Analytics</a>
+          <a href="<%= admin_export_results_path %>">Export</a>
+          <%= button_to "Sign out", admin_logout_path, method: :delete, class: "text-btn" %>
+        </nav>
+      </header>
+    <% end %>
+    <main class="admin-main">
+      <% if notice %><p class="flash notice"><%= notice %></p><% end %>
+      <% if alert %><p class="flash alert"><%= alert %></p><% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

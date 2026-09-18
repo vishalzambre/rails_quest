@@ -1,0 +1,22 @@
+<h1>Run <%= @game_session.token.truncate(16) %></h1>
+<p><%= @game_session.player.display_name %> · <%= @game_session.status %> · server <%= @game_session.server_score %> · <%= @game_session.invalid_reason %></p>
+<h2>Events</h2>
+<table class="data">
+  <thead><tr><th>Type</th><th>Accepted</th><th>Delta</th><th>Reason</th></tr></thead>
+  <tbody>
+    <% @events.each do |event| %>
+      <tr>
+        <td><%= event.event_type %></td>
+        <td><%= event.accepted? %></td>
+        <td><%= event.points_delta %></td>
+        <td><%= event.rejection_reason %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<h2>Questions</h2>
+<ul>
+  <% @attempts.each do |attempt| %>
+    <li><%= attempt.question.prompt.truncate(80) %> — <%= attempt.answered? ? (attempt.correct? ? "correct" : "wrong") : "open" %></li>
+  <% end %>
+</ul>

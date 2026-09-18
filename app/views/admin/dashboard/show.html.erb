@@ -1,0 +1,35 @@
+<h1>Control deck</h1>
+<p class="lede"><%= @event.name %></p>
+
+<section class="stat-grid">
+  <article><h2><%= @analytics[:players_started] %></h2><p>Players started</p></article>
+  <article><h2><%= @analytics[:games_completed] %></h2><p>Games completed</p></article>
+  <article><h2><%= @analytics[:highest_score] %></h2><p>Highest score</p></article>
+  <article><h2><%= @analytics[:question_accuracy] %>%</h2><p>Question accuracy</p></article>
+</section>
+
+<h2>Recent runs</h2>
+<table class="data">
+  <thead><tr><th>Player</th><th>Status</th><th>Server score</th><th>When</th></tr></thead>
+  <tbody>
+    <% @recent_sessions.each do |session| %>
+      <tr>
+        <td><%= link_to session.player.display_name, admin_game_session_path(session) %></td>
+        <td><%= session.status %></td>
+        <td><%= session.server_score %></td>
+        <td><%= time_ago_in_words(session.created_at) %> ago</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Suspicious</h2>
+<% if @suspicious.any? %>
+  <ul>
+    <% @suspicious.each do |session| %>
+      <li><%= link_to "#{session.player.display_name} · #{session.status} · #{session.invalid_reason}", admin_game_session_path(session) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No flagged runs.</p>
+<% end %>

@@ -1,0 +1,58 @@
+<% content_for :title, "Run complete — Rails Runner" %>
+
+<main class="cabinet slim">
+  <p class="conf-mark">RailsLand</p>
+  <h1 class="logo small">RUN COMPLETE!</h1>
+
+  <% if @score %>
+    <p class="hero-score"><%= format_score(@score.points) %></p>
+    <% if @rank && @score.published? %>
+      <p class="rank-line">Your Rank <strong>#<%= @rank %></strong></p>
+    <% elsif !@score.published? %>
+      <p class="rank-line">This run was held for review.</p>
+    <% end %>
+
+    <dl class="result-grid">
+      <div><dt>Ruby Gems</dt><dd><%= @score.gems_count %></dd></div>
+      <div><dt>Questions</dt><dd><%= @score.questions_summary %></dd></div>
+      <div><dt>Time left</dt><dd><%= @score.time_remaining %>s</dd></div>
+      <div><dt>Deploy bonus</dt><dd><%= format_score(@score.completion_bonus) %></dd></div>
+    </dl>
+  <% else %>
+    <p class="lede">Score is still calculating. Refresh in a moment.</p>
+  <% end %>
+
+  <div class="cta-row">
+    <%= link_to "PLAY AGAIN", register_path, class: "btn btn-primary" %>
+    <%= link_to "LEADERBOARD", leaderboard_path, class: "btn btn-ghost" %>
+    <button type="button" class="btn btn-ghost" data-share
+            data-title="Rails Runner"
+            data-text="I scored <%= format_score(@score&.points) %> in Rails Runner at Deccan Rails Conf."
+            data-url="<%= leaderboard_url %>">SHARE SCORE</button>
+  </div>
+</main>
+
+<script>
+  const button = document.querySelector("[data-share]");
+  if (button) {
+    button.addEventListener("click", async () => {
+      const payload = {
+        title: button.dataset.title,
+        text: button.dataset.text,
+        url: button.dataset.url
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(payload);
+        } else {
+          await navigator.clipboard.writeText(`${payload.text} ${payload.url}`);
+          button.textContent = "COPIED";
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          button.textContent = "COPY FAILED";
+        }
+      }
+    });
+  }
+</script>

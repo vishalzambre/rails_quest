@@ -1,0 +1,15 @@
+<h1>Leaderboard</h1>
+<%= button_to "Unpublish all scores", admin_leaderboard_path, method: :delete, class: "btn btn-ghost", form: { data: { turbo_confirm: "Hide every published score for this event?" } } %>
+<table class="data">
+  <thead><tr><th>#</th><th>Player</th><th>Score</th><th>Demo</th></tr></thead>
+  <tbody>
+    <% @scores.each_with_index do |score, index| %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= score.player.display_name %></td>
+        <td><%= score.points %></td>
+        <td><%= score.demo? ? "demo" : "" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,34 @@
+<% content_for :title, "Enter the cabinet — Rails Runner" %>
+
+<main class="cabinet slim">
+  <p class="conf-mark">RailsLand · Player 1</p>
+  <h1 class="logo small">INSERT NAME</h1>
+  <p class="lede">Ninety seconds. Three lives. One deploy.</p>
+
+  <%= form_with model: @player, url: register_path, class: "arcade-form" do |form| %>
+    <% if @player.errors.any? %>
+      <p class="form-error"><%= @player.errors.full_messages.to_sentence %></p>
+    <% end %>
+
+    <label>
+      Name
+      <%= form.text_field :name, required: true, maxlength: 24, autocomplete: "nickname", autofocus: true, placeholder: "ruby_ninja" %>
+    </label>
+    <label>
+      GitHub <span>optional</span>
+      <%= form.text_field :github_username, maxlength: 39, autocomplete: "username", placeholder: "handle" %>
+    </label>
+    <label>
+      Email <span>optional, never public</span>
+      <%= form.email_field :email, autocomplete: "email", placeholder: "you@company.com" %>
+    </label>
+    <label>
+      Team / company <span>optional</span>
+      <%= form.text_field :company, maxlength: 80, autocomplete: "organization", placeholder: "Saeloun" %>
+    </label>
+
+    <button type="submit" class="btn btn-primary">PLAY NOW</button>
+  <% end %>
+
+  <p class="backline"><%= link_to "Back to cabinet", root_path %></p>
+</main>

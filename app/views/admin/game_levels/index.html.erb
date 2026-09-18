@@ -1,0 +1,15 @@
+<h1>Levels</h1>
+<table class="data">
+  <thead><tr><th>Name</th><th>Key</th><th>Playable</th><th>Active</th><th></th></tr></thead>
+  <tbody>
+    <% @levels.each do |level| %>
+      <tr>
+        <td><%= level.name %></td>
+        <td><%= level.key %></td>
+        <td><%= level.playable? %></td>
+        <td><%= level.active? %></td>
+        <td><%= link_to "Edit", edit_admin_game_level_path(level) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
