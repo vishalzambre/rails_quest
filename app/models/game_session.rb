@@ -20,8 +20,13 @@ class GameSession < ApplicationRecord
   def expired? = status == "expired"
   def marked_invalid? = status == "invalid"
 
+  scope :created, -> { where(status: "created") }
+  scope :running, -> { where(status: "running") }
+  scope :completed, -> { where(status: "completed") }
+  scope :expired, -> { where(status: "expired") }
+  scope :invalid_status, -> { where(status: "invalid") }
   scope :playable, -> { where(status: %w[created running]) }
-  scope :suspicious, -> { where(status: "invalid").or(where("rejected_event_count >= ?", 8)) }
+  scope :suspicious, -> { invalid_status.or(where("rejected_event_count >= ?", 8)) }
 
   delegate :display_name, to: :player
 
