@@ -115,17 +115,22 @@ Questions live in PostgreSQL, not in TypeScript.
 
 ## How to create a conference event
 
+Admin → **Events** → **Register conference**. Set the name, optional slug, location, and X handle. Each event keeps its own players and scores.
+
+The QR cabinet, registration, and public leaderboard use one live event at a time: `CONFERENCE_SLUG`. Point that env var at the new slug and restart `web`. Previous conferences stay in the database.
+
+You can still create one in a Rails console:
+
 ```ruby
 event = ConferenceEvent.create!(
   name: "Deccan Rails Conf",
   slug: "deccan-rails-conf",
   location: "Hyderabad",
+  twitter_handle: "hideccanqueen",
   active: true
 )
 GameConfiguration.create!(conference_event: event)
 ```
-
-Point `CONFERENCE_SLUG` at that slug and restart `web`.
 
 ## How to replace pixel-art assets
 

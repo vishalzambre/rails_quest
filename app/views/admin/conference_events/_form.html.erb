@@ -1,0 +1,23 @@
+<%= form_with model: [:admin, event], class: "arcade-form" do |form| %>
+  <% if event.errors.any? %>
+    <p class="form-error" role="alert"><%= event.errors.full_messages.to_sentence %></p>
+  <% end %>
+
+  <label>Name <%= form.text_field :name, required: true %></label>
+  <label>
+    Slug
+    <span>Used by CONFERENCE_SLUG to choose the live cabinet. Leave blank to generate from the name.</span>
+    <%= form.text_field :slug, spellcheck: false, autocomplete: "off" %>
+  </label>
+  <label>Location <%= form.text_field :location %></label>
+  <label>
+    X / Twitter handle
+    <span>SHARE ON X mentions this account. Paste @name or a profile URL.</span>
+    <%= form.text_field :twitter_handle, autocomplete: "off", spellcheck: false %>
+  </label>
+  <label>Leaderboard size <%= form.number_field :leaderboard_limit, min: 1, max: 500 %></label>
+  <label class="check"><%= form.check_box :active %> Active</label>
+  <%= form.submit event.new_record? ? "Register conference" : "Save conference", class: "btn btn-primary" %>
+<% end %>
+
+<p class="backline"><%= link_to "All conferences", admin_conference_events_path %></p>

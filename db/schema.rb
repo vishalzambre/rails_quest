@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_18_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_19_143000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,6 +24,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_120000) do
     t.string "slug", null: false
     t.datetime "starts_at"
     t.string "time_zone", default: "Asia/Kolkata", null: false
+    t.string "twitter_handle"
     t.datetime "updated_at", null: false
     t.index ["active"], name: "index_conference_events_on_active"
     t.index ["slug"], name: "index_conference_events_on_slug", unique: true

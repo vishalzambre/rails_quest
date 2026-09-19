@@ -4,10 +4,12 @@ event = ConferenceEvent.find_or_create_by!(slug: ENV.fetch("CONFERENCE_SLUG", "d
   record.name = "Deccan Rails Conf"
   record.location = "Pune"
   record.time_zone = "Asia/Kolkata"
+  record.twitter_handle = "hideccanqueen"
   record.starts_at = Time.zone.parse("2026-09-18")
   record.ends_at = Time.zone.parse("2026-09-20").end_of_day
   record.active = true
 end
+event.update!(twitter_handle: "hideccanqueen") if event.twitter_handle.blank?
 
 GameConfiguration.find_or_create_by!(conference_event: event)
 

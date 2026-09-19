@@ -1,0 +1,34 @@
+<h1>Conference events</h1>
+<p class="lede">
+  The live cabinet is <strong><%= @live.name %></strong>
+  <code><%= @live.slug %></code>.
+  Register another conference to keep its scores separate. Old runs stay mapped to the event they were played at.
+</p>
+
+<p><%= link_to "Register conference", new_admin_conference_event_path, class: "btn btn-primary" %></p>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+      <th>X handle</th>
+      <th>Scores</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events.each do |event| %>
+      <tr>
+        <td>
+          <%= event.name %>
+          <% if event.id == @live.id %><small>live cabinet</small><% end %>
+        </td>
+        <td><code><%= event.slug %></code></td>
+        <td><%= event.twitter_mention || "—" %></td>
+        <td><%= event.scores.count %></td>
+        <td><%= link_to "Edit", edit_admin_conference_event_path(event) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

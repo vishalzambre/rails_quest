@@ -7,10 +7,18 @@ class ConferenceEvent < ApplicationRecord
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true
   validates :leaderboard_limit, numericality: { greater_than: 0, less_than_or_equal_to: 500 }
+  validates :twitter_handle, length: { maximum: 15 }, allow_blank: true,
+            format: { with: /\A[A-Za-z0-9_]+\z/, message: "must be a username without @" }
 
   scope :active, -> { where(active: true) }
 
-  # Returns the event used by the public game, creating the Deccan default if needed.
+  before_validation :assign_slug, on: :create
+  before_validation :normalize_twitter_handle
+
+  # Live cabinet for registration, play, and the public leaderboard.
+  #
+  # One event is current at a time (+CONFERENCE_SLUG+, else the first active
+  # row). Other events stay in the database with their own players and scores.
   def self.current
     slug = ENV.fetch("CONFERENCE_SLUG", "deccan-rails-conf")
     find_by(slug: slug) || active.first || create_default!
@@ -23,9 +31,55 @@ class ConferenceEvent < ApplicationRecord
       slug: ENV.fetch("CONFERENCE_SLUG", "deccan-rails-conf"),
       location: "Pune",
       time_zone: "Asia/Kolkata",
+      twitter_handle: "hideccanqueen",
       starts_at: Time.zone.parse("2026-09-18"),
       ends_at: Time.zone.parse("2026-09-20").end_of_day,
       active: true
     )
+  end
+
+  # Mention string for tweets, or nil when this event has no X account.
+  #
+  # @return [String, nil]
+  def twitter_mention
+    twitter_handle.present? ? "@#{twitter_handle}" : nil
+  end
+
+  # Brag copy for a finished run. Appends the event X handle when one is saved.
+  #
+  # @param points [String, Integer] formatted or raw score
+  # @return [String]
+  def score_share_text(points:)
+    sentence = "I scored #{points} in Rails Runner at #{name}."
+    mention = twitter_mention
+    mention ? "#{sentence} #{mention}" : sentence
+  end
+
+  # X/Twitter Web Intent URL for posting +text+ with this event tagged.
+  #
+  # @param text [String] full tweet body, including the mention when present
+  # @param url [String, nil] page attached to the post
+  # @return [String, nil] intent URL, or nil when no handle is configured
+  def twitter_share_url(text:, url: nil)
+    return if twitter_handle.blank?
+
+    params = { text: text, related: twitter_handle }
+    params[:url] = url if url.present?
+    "https://twitter.com/intent/tweet?#{params.to_query}"
+  end
+
+  private
+
+  # Fills +slug+ from the name when registering a new conference.
+  def assign_slug
+    self.slug = name.to_s.parameterize if slug.blank?
+  end
+
+  # Accepts @name, a profile URL, or a bare username and stores the username only.
+  def normalize_twitter_handle
+    raw = twitter_handle.to_s.strip
+    raw = raw.sub(%r{\Ahttps?://(?:www\.)?(?:x|twitter)\.com/}i, "")
+    raw = raw.split(%r{[/?#]}).first.to_s
+    self.twitter_handle = raw.delete_prefix("@").presence
   end
 end

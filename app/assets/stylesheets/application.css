@@ -127,6 +127,19 @@ h1, h2, .logo { font-family: var(--font-pixel); }
 .btn-primary { background: var(--ruby); }
 .btn-ghost { background: #172038; }
 .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #000; }
+.share-block { display: grid; gap: 0.7rem; }
+  margin: 0.35rem 0 0;
+  padding: 0.7rem 0.8rem;
+  background: #0b1020;
+  border: 3px solid #000;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  word-break: break-word;
+  user-select: all;
+  -webkit-user-select: all;
+}
 
 .stat-row, .result-grid {
   display: grid;
@@ -392,6 +405,9 @@ body.admin { background: #11151c; color: #ece7da; font-family: var(--font-ui); }
 @media (min-width: 720px) {
   .touch-controls { display: none; }
   .cta-row { grid-template-columns: 1fr 1fr; }
+  .share-block { grid-column: 1 / -1; }
+  .share-block:has([data-twitter-share]) { grid-template-columns: 1fr 1fr; }
+  .share-fallback { grid-column: 1 / -1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

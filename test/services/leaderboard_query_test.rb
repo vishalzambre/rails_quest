@@ -33,6 +33,22 @@ class LeaderboardQueryTest < ActiveSupport::TestCase
     assert_equal [ "today" ], names
   end
 
+  test "keeps scores on the conference they were played at" do
+    publish_score("deccan", 400, Time.current)
+    other = ConferenceEvent.create!(name: "RubyConf", slug: "rubyconf-#{SecureRandom.hex(3)}", location: "Goa")
+    other_player = Player.create!(conference_event: other, name: "visitor")
+    other_session = GameSessions::Creator.new(player: other_player).call
+    other_session.update!(status: :completed)
+    Score.create!(game_session: other_session, player: other_player, conference_event: other, points: 900, published: true)
+
+    deccan_names = Leaderboard::Query.new(conference_event: @event).scores.map { |score| score.player.name }
+    other_names = Leaderboard::Query.new(conference_event: other).scores.map { |score| score.player.name }
+
+    assert_includes deccan_names, "deccan"
+    assert_not_includes deccan_names, "visitor"
+    assert_equal [ "visitor" ], other_names
+  end
+
   private
 
   def publish_score(name, points, at)

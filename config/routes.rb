@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       end
     end
     resources :game_levels, only: %i[index edit update]
+    resources :conference_events, only: %i[index new create edit update]
     resource  :game_configuration, only: %i[show update]
     resources :game_sessions, only: %i[index show] do
       collection do

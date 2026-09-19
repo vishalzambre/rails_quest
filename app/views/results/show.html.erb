@@ -1,4 +1,7 @@
 <% content_for :title, "Run complete — Rails Runner" %>
+<% content_for :vite do %>
+  <%= vite_javascript_tag "results.ts" %>
+<% end %>
 
 <main class="cabinet slim">
   <p class="conf-mark">RailsLand</p>
@@ -25,34 +28,18 @@
   <div class="cta-row">
     <%= link_to "PLAY AGAIN", register_path, class: "btn btn-primary" %>
     <%= link_to "LEADERBOARD", leaderboard_path, class: "btn btn-ghost" %>
-    <button type="button" class="btn btn-ghost" data-share
-            data-title="Rails Runner"
-            data-text="I scored <%= format_score(@score&.points) %> in Rails Runner at Deccan Rails Conf."
-            data-url="<%= leaderboard_url %>">SHARE SCORE</button>
+    <div class="share-block">
+      <% event = @game_session.conference_event %>
+      <% share_text = event.score_share_text(points: format_score(@score&.points)) %>
+      <% twitter_url = event.twitter_share_url(text: share_text, url: leaderboard_url) %>
+      <button type="button" class="btn btn-ghost" data-share
+              data-title="Rails Runner"
+              data-text="<%= share_text %>"
+              data-url="<%= leaderboard_url %>">SHARE SCORE</button>
+      <% if twitter_url %>
+        <%= link_to "SHARE ON X", twitter_url, class: "btn btn-ghost", target: "_blank", rel: "noopener noreferrer", data: { twitter_share: true } %>
+      <% end %>
+      <p class="share-fallback" data-share-fallback hidden></p>
+    </div>
   </div>
 </main>
-
-<script>
-  const button = document.querySelector("[data-share]");
-  if (button) {
-    button.addEventListener("click", async () => {
-      const payload = {
-        title: button.dataset.title,
-        text: button.dataset.text,
-        url: button.dataset.url
-      };
-      try {
-        if (navigator.share) {
-          await navigator.share(payload);
-        } else {
-          await navigator.clipboard.writeText(`${payload.text} ${payload.url}`);
-          button.textContent = "COPIED";
-        }
-      } catch (error) {
-        if (error.name !== "AbortError") {
-          button.textContent = "COPY FAILED";
-        }
-      }
-    });
-  }
-</script>
