@@ -12,7 +12,7 @@ gem "puma", ">= 5.0"
 gem "json", "~> 2.10"
 
 # Redis for Action Cable, cache, and rate limiting
-gem "redis", "~> 5.4"
+gem "redis", "~> 6.0"
 
 # Phaser game assets are bundled by Vite
 gem "vite_rails"
