@@ -21,5 +21,13 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get leaderboard_url
     assert_response :success
     assert_select "body", text: /secret@example.com/, count: 0
+    assert_select "[data-leaderboard][data-scope=live]"
+  end
+
+  test "live and today leaderboard scopes render" do
+    get live_leaderboard_url
+    assert_response :success
+    get today_leaderboard_url
+    assert_response :success
   end
 end

@@ -1,6 +1,6 @@
 class LeaderboardsController < ApplicationController
   def show
-    load_board("conference")
+    load_board("live")
   end
 
   def today
@@ -20,6 +20,8 @@ class LeaderboardsController < ApplicationController
     @event = current_conference_event
     limit = params[:limit].presence&.to_i
     limit = 10 if params[:top] == "10"
-    @scores = Leaderboard::Query.new(conference_event: @event, scope: @scope, limit: limit).scores
+    query = Leaderboard::Query.new(conference_event: @event, scope: @scope, limit: limit)
+    @scores = query.scores
+    @latest = query.latest
   end
 end

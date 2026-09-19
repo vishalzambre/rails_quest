@@ -236,9 +236,30 @@ body.games-show .scanlines { display: none; }
 .tv-head { text-align: center; }
 .tv-head h1 { font-size: clamp(1.4rem, 5vw, 3rem); margin: 0.2rem 0; }
 .tv-sub { font-family: var(--font-pixel); color: var(--orange); font-size: 0.7rem; }
-.tv-tabs { display: flex; justify-content: center; gap: 1rem; }
+.tv-tabs { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
 .tv-tabs a { font-family: var(--font-pixel); font-size: 0.6rem; text-decoration: none; color: #9aa3c2; }
 .tv-tabs a.on { color: var(--green); }
+.live-line { display: flex; justify-content: center; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+.live-badge {
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  color: #9aa3c2;
+  border: 3px solid #9aa3c2;
+  padding: 0.35rem 0.55rem;
+}
+.live-badge.on {
+  color: var(--green);
+  border-color: var(--green);
+  animation: pulse 1s steps(2) infinite;
+}
+.live-stamp { color: #9aa3c2; font-family: var(--font-mono); font-size: 0.85rem; }
+.latest-ticker {
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--cream);
+  border: 2px solid var(--line);
+  padding: 0.5rem;
+}
 .high-banner {
   text-align: center;
   font-family: var(--font-pixel);
@@ -252,7 +273,9 @@ body.games-show .scanlines { display: none; }
 .tv-table th { text-align: left; color: var(--orange); font-family: var(--font-pixel); font-size: 0.62rem; padding: 0.7rem; }
 .tv-table td { padding: 0.7rem; border-bottom: 2px solid var(--line); font-size: clamp(1rem, 2.4vw, 1.6rem); }
 .tv-table small { display: block; color: #9aa3c2; font-size: 0.8rem; }
-.tv-table tr.fresh { background: rgba(61, 220, 151, 0.12); }
+.tv-table tr.fresh { background: rgba(61, 220, 151, 0.16); }
+.tv-table tr.up { background: rgba(61, 220, 151, 0.1); color: var(--green); }
+.tv-table tr.down { background: rgba(204, 52, 45, 0.08); color: #ffb4b0; }
 .tv-empty { text-align: center; font-family: var(--font-pixel); }
 
 body.admin { background: #11151c; color: #ece7da; font-family: var(--font-ui); }

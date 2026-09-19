@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get  "results/:token", to: "results#show", as: :result
 
   get "leaderboard", to: "leaderboards#show"
+  get "leaderboard/live", to: "leaderboards#show", as: :live_leaderboard
   get "leaderboard/today", to: "leaderboards#today", as: :today_leaderboard
   get "leaderboard/conference", to: "leaderboards#conference", as: :conference_leaderboard
 

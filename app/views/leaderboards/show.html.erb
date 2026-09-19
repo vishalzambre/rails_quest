@@ -8,14 +8,32 @@
   <header class="tv-head">
     <p>Deccan Rails Conf</p>
     <h1>RAILS RUNNER</h1>
-    <p class="tv-sub"><%= @scope == "today" ? "Today's cabinet" : "Conference cabinet" %></p>
+    <p class="tv-sub">
+      <% if @scope == "today" %>
+        Today's cabinet
+      <% elsif @scope == "conference" %>
+        Conference cabinet
+      <% else %>
+        Live cabinet
+      <% end %>
+    </p>
+    <p class="live-line">
+      <span class="live-badge" data-live-badge>LIVE</span>
+      <span class="live-stamp" data-updated>Waiting for scores…</span>
+    </p>
     <nav class="tv-tabs">
-      <%= link_to "CONFERENCE", leaderboard_path, class: (@scope == "conference" ? "on" : nil) %>
+      <%= link_to "LIVE", live_leaderboard_path, class: (@scope == "live" ? "on" : nil) %>
       <%= link_to "TODAY", today_leaderboard_path, class: (@scope == "today" ? "on" : nil) %>
+      <%= link_to "CONFERENCE", conference_leaderboard_path, class: (@scope == "conference" ? "on" : nil) %>
     </nav>
   </header>
 
   <p class="high-banner" data-high-banner hidden>NEW HIGH SCORE!</p>
+  <p class="latest-ticker" data-latest <%= "hidden".html_safe unless @latest %>>
+    <% if @latest %>
+      Latest: <strong><%= @latest.player.display_name %></strong> · <%= format_score(@latest.points) %>
+    <% end %>
+  </p>
 
   <table class="tv-table">
     <thead>
@@ -27,7 +45,7 @@
     </thead>
     <tbody data-rows>
       <% @scores.each_with_index do |score, index| %>
-        <tr data-points="<%= score.points %>">
+        <tr data-player="<%= score.player.display_name %>" data-points="<%= score.points %>" data-rank="<%= index + 1 %>">
           <td><%= index + 1 %></td>
           <td>
             <strong><%= score.player.display_name %></strong>
@@ -41,7 +59,5 @@
     </tbody>
   </table>
 
-  <% if @scores.empty? %>
-    <p class="tv-empty">Waiting for the first deploy…</p>
-  <% end %>
+  <p class="tv-empty" data-empty <%= "hidden".html_safe if @scores.any? %>>Waiting for the first deploy…</p>
 </main>

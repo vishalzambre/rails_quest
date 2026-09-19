@@ -15,6 +15,16 @@ module Leaderboard
       relation.limit(resolved_limit)
     end
 
+    # Most recently published score, used by the LIVE ticker.
+    #
+    # @return [Score, nil]
+    def latest
+      relation = Score.for_event(@conference_event).published.includes(:player).order(created_at: :desc)
+      relation = relation.competitive unless GameConfiguration.current(@conference_event).include_demo_on_leaderboard?
+      relation = relation.today if @scope == "today"
+      relation.first
+    end
+
     # 1-based rank for a published score, or nil when the run is unpublished.
     #
     # @param score [Score]

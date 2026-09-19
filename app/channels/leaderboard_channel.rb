@@ -1,6 +1,6 @@
 class LeaderboardChannel < ApplicationCable::Channel
   def subscribed
-    scope = %w[today conference].include?(params[:scope]) ? params[:scope] : "conference"
+    scope = %w[live today conference].include?(params[:scope]) ? params[:scope] : "live"
     stream_from "leaderboard:#{scope}"
   end
 end
