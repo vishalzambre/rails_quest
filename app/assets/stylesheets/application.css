@@ -172,11 +172,102 @@ h1, h2, .logo { font-family: var(--font-pixel); }
   padding: 0.8rem;
   min-height: 48px;
   border: 3px solid #000;
-  background: #f4e8c1;
-  color: var(--ink);
+  background: #0b1020;
+  color: var(--cream);
 }
-.form-error { color: #ff8a8a; }
+.form-error { color: #ff8a8a; text-align: center; }
 .check { display: flex !important; align-items: center; gap: 0.5rem; }
+
+.register-screen { padding-top: 1.4rem; }
+.register-lede {
+  margin: 0.35rem 0 0;
+  color: #c5cbe0;
+  font-size: 0.95rem;
+}
+.register-form { display: grid; gap: 1rem; margin-top: 1.15rem; }
+.name-slot {
+  background: #05070f;
+  border: 4px solid #000;
+  box-shadow: inset 0 0 0 2px #2a334d, 0 6px 0 #05060d;
+  padding: 0.75rem 0.9rem 0.85rem;
+}
+.name-slot label {
+  display: block;
+  font-family: var(--font-pixel);
+  font-size: 0.52rem;
+  color: var(--orange);
+  margin-bottom: 0.45rem;
+}
+.name-slot input {
+  width: 100%;
+  border: 0;
+  border-bottom: 3px dashed #2a334d;
+  background: transparent;
+  color: var(--green);
+  font-family: var(--font-pixel);
+  font-size: clamp(1rem, 4.2vw, 1.2rem);
+  line-height: 1.6;
+  min-height: 48px;
+  padding: 0.15rem 0 0.35rem;
+  caret-color: var(--green);
+  outline: none;
+}
+.name-slot input::placeholder { color: transparent; }
+.name-slot:focus-within {
+  box-shadow: inset 0 0 0 2px var(--green), 0 6px 0 #05060d;
+}
+.name-slot:focus-within input { border-bottom-color: var(--green); }
+
+.register-extras {
+  margin: 0;
+  padding: 0.65rem 0.85rem 0.8rem;
+  min-width: 0;
+  border: 3px solid #000;
+  background: #0b1020;
+  display: grid;
+  gap: 0.2rem;
+}
+.register-extras legend {
+  padding: 0 0.4rem;
+  font-family: var(--font-pixel);
+  font-size: 0.45rem;
+  color: #8b93ad;
+}
+.register-extras .field {
+  display: grid;
+  grid-template-columns: 4.8rem minmax(0, 1fr);
+  align-items: end;
+  gap: 0.45rem 0.7rem;
+  min-width: 0;
+  min-height: 44px;
+}
+.register-extras label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #9aa3c2;
+  padding-bottom: 0.35rem;
+}
+.register-extras input {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0.35rem 0;
+  border: 0;
+  border-bottom: 2px dashed #5b6588;
+  background: transparent;
+  color: var(--cream);
+  font: 16px var(--font-mono);
+  caret-color: var(--orange);
+  outline: none;
+}
+.register-extras input:focus { border-bottom-color: var(--orange); }
+.register-extras input::placeholder { color: transparent; }
+.field-hint {
+  margin: 0.15rem 0 0.05rem 5.5rem;
+  color: #6d7694;
+  font-size: 0.72rem;
+}
+.register-form .btn { margin-top: 0.15rem; }
 
 body.games-show .scanlines { display: none; }
 #rails-runner {

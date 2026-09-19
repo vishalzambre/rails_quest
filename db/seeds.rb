@@ -2,7 +2,7 @@
 
 event = ConferenceEvent.find_or_create_by!(slug: ENV.fetch("CONFERENCE_SLUG", "deccan-rails-conf")) do |record|
   record.name = "Deccan Rails Conf"
-  record.location = "Hyderabad"
+  record.location = "Pune"
   record.time_zone = "Asia/Kolkata"
   record.starts_at = Time.zone.parse("2026-09-18")
   record.ends_at = Time.zone.parse("2026-09-20").end_of_day

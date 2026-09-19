@@ -21,7 +21,7 @@ class ConferenceEvent < ApplicationRecord
     create!(
       name: "Deccan Rails Conf",
       slug: ENV.fetch("CONFERENCE_SLUG", "deccan-rails-conf"),
-      location: "Hyderabad",
+      location: "Pune",
       time_zone: "Asia/Kolkata",
       starts_at: Time.zone.parse("2026-09-18"),
       ends_at: Time.zone.parse("2026-09-20").end_of_day,

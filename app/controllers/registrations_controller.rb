@@ -1,5 +1,6 @@
 class RegistrationsController < ApplicationController
   rate_limit to: 20, within: 1.minute, by: -> { request.remote_ip }, only: :create
+  before_action :set_config, only: %i[new create]
 
   def new
     @player = Player.new
@@ -23,6 +24,11 @@ class RegistrationsController < ApplicationController
   end
 
   private
+
+  # Loads the live scoring table so the register screen can quote duration and lives.
+  def set_config
+    @config = GameConfiguration.current(current_conference_event)
+  end
 
   def player_params
     params.require(:player).permit(:name, :github_username, :email, :company)

@@ -1,31 +1,43 @@
 <% content_for :title, "Enter the cabinet — Rails Runner" %>
 
-<main class="cabinet slim">
+<main class="cabinet slim register-screen">
   <p class="conf-mark">RailsLand · Player 1</p>
   <h1 class="logo small">INSERT NAME</h1>
-  <p class="lede">Ninety seconds. Three lives. One deploy.</p>
+  <p class="lede register-lede"><%= @config.duration_seconds %> seconds. <%= @config.lives %> lives. One deploy.</p>
 
-  <%= form_with model: @player, url: register_path, class: "arcade-form" do |form| %>
+  <%= form_with model: @player, url: register_path, class: "register-form" do |form| %>
     <% if @player.errors.any? %>
-      <p class="form-error"><%= @player.errors.full_messages.to_sentence %></p>
+      <p class="form-error" role="alert"><%= @player.errors.full_messages.to_sentence %></p>
     <% end %>
 
-    <label>
-      Name
-      <%= form.text_field :name, required: true, maxlength: 24, autocomplete: "nickname", autofocus: true, placeholder: "ruby_ninja" %>
-    </label>
-    <label>
-      GitHub <span>optional</span>
-      <%= form.text_field :github_username, maxlength: 39, autocomplete: "username", placeholder: "handle" %>
-    </label>
-    <label>
-      Email <span>optional, never public</span>
-      <%= form.email_field :email, autocomplete: "email", placeholder: "you@company.com" %>
-    </label>
-    <label>
-      Team / company <span>optional</span>
-      <%= form.text_field :company, maxlength: 80, autocomplete: "organization", placeholder: "Saeloun" %>
-    </label>
+    <div class="name-slot">
+      <%= form.label :name, "Name" %>
+      <%= form.text_field :name,
+            required: true,
+            maxlength: 24,
+            autocomplete: "nickname",
+            autofocus: true,
+            spellcheck: false,
+            placeholder: " " %>
+    </div>
+
+    <fieldset class="register-extras">
+      <legend>Skip if you want</legend>
+
+      <div class="field">
+        <%= form.label :github_username, "GitHub" %>
+        <%= form.text_field :github_username, maxlength: 39, autocomplete: "username", spellcheck: false, placeholder: " " %>
+      </div>
+      <div class="field">
+        <%= form.label :email, "Email" %>
+        <%= form.email_field :email, autocomplete: "email", placeholder: " " %>
+      </div>
+      <p class="field-hint">Email stays off the leaderboard.</p>
+      <div class="field">
+        <%= form.label :company, "Team" %>
+        <%= form.text_field :company, maxlength: 80, autocomplete: "organization", placeholder: " " %>
+      </div>
+    </fieldset>
 
     <button type="submit" class="btn btn-primary">PLAY NOW</button>
   <% end %>
