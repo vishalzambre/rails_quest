@@ -68,6 +68,14 @@ class ConferenceEvent < ApplicationRecord
     "https://twitter.com/intent/tweet?#{params.to_query}"
   end
 
+  # Public cabinet URL attendees open (or scan) to play this event.
+  #
+  # @param host [String] origin such as https://game.example.com
+  # @return [String]
+  def play_url(host: ENV.fetch("APP_HOST", "http://localhost:3000"))
+    "#{host.to_s.chomp('/')}/e/#{slug}"
+  end
+
   private
 
   # Fills +slug+ from the name when registering a new conference.

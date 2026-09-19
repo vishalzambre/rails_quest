@@ -4,9 +4,9 @@
   <%= vite_javascript_tag "leaderboard.ts" %>
 <% end %>
 
-<main class="tv" data-leaderboard data-scope="<%= @scope %>">
+<main class="tv" data-leaderboard data-scope="<%= @scope %>" data-event="<%= @event.slug %>">
   <header class="tv-head">
-    <p>Deccan Rails Conf</p>
+    <p><%= @event.name %></p>
     <h1>RAILS RUNNER</h1>
     <p class="tv-sub">
       <% if @scope == "today" %>
@@ -22,9 +22,9 @@
       <span class="live-stamp" data-updated>Waiting for scores…</span>
     </p>
     <nav class="tv-tabs">
-      <%= link_to "LIVE", live_leaderboard_path, class: (@scope == "live" ? "on" : nil) %>
-      <%= link_to "TODAY", today_leaderboard_path, class: (@scope == "today" ? "on" : nil) %>
-      <%= link_to "CONFERENCE", conference_leaderboard_path, class: (@scope == "conference" ? "on" : nil) %>
+      <%= link_to "LIVE", cabinet_leaderboard_path(scope: "live"), class: (@scope == "live" ? "on" : nil) %>
+      <%= link_to "TODAY", cabinet_leaderboard_path(scope: "today"), class: (@scope == "today" ? "on" : nil) %>
+      <%= link_to "CONFERENCE", cabinet_leaderboard_path(scope: "conference"), class: (@scope == "conference" ? "on" : nil) %>
     </nav>
   </header>
 

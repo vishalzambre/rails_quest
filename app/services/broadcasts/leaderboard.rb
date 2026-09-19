@@ -17,8 +17,8 @@ module Broadcasts
         }
       }
 
-      %w[live conference].each { |scope| ActionCable.server.broadcast("leaderboard:#{scope}", payload) }
-      ActionCable.server.broadcast("leaderboard:today", payload) if @score.created_at.to_date == Time.zone.today
+      %w[live conference].each { |scope| ActionCable.server.broadcast("leaderboard:#{@score.conference_event.slug}:#{scope}", payload) }
+      ActionCable.server.broadcast("leaderboard:#{@score.conference_event.slug}:today", payload) if @score.created_at.to_date == Time.zone.today
     rescue StandardError => error
       Rails.logger.warn("Leaderboard broadcast skipped: #{error.message}")
     end

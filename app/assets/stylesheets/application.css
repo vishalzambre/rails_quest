@@ -391,6 +391,16 @@ body.admin { background: #11151c; color: #ece7da; font-family: var(--font-ui); }
 .admin-bar a, .text-btn { color: #ece7da; background: none; border: 0; font: inherit; cursor: pointer; text-decoration: none; }
 .admin-main { padding: 1rem; max-width: 1100px; margin: 0 auto; }
 .admin .data { width: 100%; border-collapse: collapse; }
+.admin .play-link { display: grid; gap: 0.35rem; margin: 1rem 0 1.4rem; font-size: 0.92rem; }
+.admin .play-link span { color: #9aa3c2; font-size: 0.78rem; }
+.admin .play-link input {
+  font: 16px var(--font-mono);
+  padding: 0.8rem;
+  min-height: 48px;
+  border: 3px solid #000;
+  background: #0b1020;
+  color: var(--cream);
+}
 .admin .data th, .admin .data td { text-align: left; padding: 0.55rem; border-bottom: 1px solid #2a334d; }
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.7rem; }
 .flash { padding: 0.6rem 0.8rem; border: 2px solid #000; }

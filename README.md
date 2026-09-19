@@ -56,7 +56,7 @@ docker compose down
 | `REDIS_URL` | Action Cable + cache |
 | `ADMIN_USERNAME` / `ADMIN_PASSWORD` | Admin cabinet login (default `admin` / `changeme`) |
 | `APP_HOST` | Public URL used in share copy |
-| `CONFERENCE_SLUG` | Which `ConferenceEvent` the QR landing uses |
+| `CONFERENCE_SLUG` | Default event for `/` and `/leaderboard`. Play starts from `/e/:slug` |
 | `SEED_ON_BOOT` | `true` runs idempotent seeds when the web container starts |
 
 See `.env.example`.
@@ -117,7 +117,13 @@ Questions live in PostgreSQL, not in TypeScript.
 
 Admin → **Events** → **Register conference**. Set the name, optional slug, location, and X handle. Each event keeps its own players and scores.
 
-The QR cabinet, registration, and public leaderboard use one live event at a time: `CONFERENCE_SLUG`. Point that env var at the new slug and restart `web`. Previous conferences stay in the database.
+The public homepage is the leaderboard. To start a run, share that event’s play link:
+
+```
+https://your-host/e/deccan-rails-conf
+```
+
+PLAY NOW only appears on `/e/:slug`. Anyone who starts from that URL is scored on that event.
 
 You can still create one in a Rails console:
 

@@ -1,9 +1,9 @@
-<% content_for :title, "Rails Runner — Deccan Rails Conf" %>
+<% content_for :title, "Rails Runner — #{current_conference_event.name}" %>
 
 <main class="cabinet">
-  <p class="conf-mark">Deccan Rails Conf · Hyderabad</p>
+  <p class="conf-mark"><%= [ current_conference_event.name, current_conference_event.location ].compact_blank.join(" · ") %></p>
   <h1 class="logo">RAILS<br>RUNNER</h1>
-  <p class="subtitle">Deccan Rails Conf Edition</p>
+  <p class="subtitle"><%= current_conference_event.name %> Edition</p>
   <p class="tagline">Run. Code. Debug. Deploy.</p>
 
   <div class="hero-stage" aria-hidden="true">
@@ -15,8 +15,12 @@
   </div>
 
   <div class="cta-row">
-    <%= link_to "PLAY NOW", register_path, class: "btn btn-primary" %>
-    <%= link_to "LEADERBOARD", leaderboard_path, class: "btn btn-ghost" %>
+    <% if params[:conference_slug].present? %>
+      <%= link_to "PLAY NOW", cabinet_register_path, class: "btn btn-primary" %>
+      <%= link_to "LEADERBOARD", cabinet_leaderboard_path, class: "btn btn-ghost" %>
+    <% else %>
+      <%= link_to "LEADERBOARD", cabinet_leaderboard_path, class: "btn btn-primary" %>
+    <% end %>
   </div>
 
   <dl class="stat-row">

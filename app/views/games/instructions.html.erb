@@ -13,5 +13,5 @@
     <li><span>DEPLOY</span> Reach the flag before the clock hits zero.</li>
   </ul>
 
-  <%= link_to "START RUN", play_path, class: "btn btn-primary" %>
+  <%= link_to "START RUN", event_play_path(@game_session.conference_event.slug), class: "btn btn-primary" %>
 </main>

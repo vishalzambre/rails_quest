@@ -45,7 +45,7 @@ module Admin
       if @event.slug == current_conference_event.slug
         "Conference saved. This cabinet is already live."
       else
-        "Conference saved. Past scores stay on their own events. Set CONFERENCE_SLUG=#{@event.slug} and restart web to open this cabinet."
+        "Conference saved. Share #{@event.play_url} so players can start a run on this event."
       end
     end
   end

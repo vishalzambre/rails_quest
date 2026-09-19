@@ -1,11 +1,11 @@
 <% content_for :title, "Enter the cabinet — Rails Runner" %>
 
 <main class="cabinet slim register-screen">
-  <p class="conf-mark">RailsLand · Player 1</p>
+  <p class="conf-mark"><%= current_conference_event.name %> · Player 1</p>
   <h1 class="logo small">INSERT NAME</h1>
   <p class="lede register-lede"><%= @config.duration_seconds %> seconds. <%= @config.lives %> lives. One deploy.</p>
 
-  <%= form_with model: @player, url: register_path, class: "register-form" do |form| %>
+  <%= form_with model: @player, url: cabinet_register_path, class: "register-form" do |form| %>
     <% if @player.errors.any? %>
       <p class="form-error" role="alert"><%= @player.errors.full_messages.to_sentence %></p>
     <% end %>
@@ -42,5 +42,5 @@
     <button type="submit" class="btn btn-primary">PLAY NOW</button>
   <% end %>
 
-  <p class="backline"><%= link_to "Back to cabinet", root_path %></p>
+  <p class="backline"><%= link_to "Back to cabinet", cabinet_home_path %></p>
 </main>

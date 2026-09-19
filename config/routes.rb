@@ -5,14 +5,26 @@ Rails.application.routes.draw do
 
   get  "register", to: "registrations#new", as: :register
   post "register", to: "registrations#create"
-  get  "instructions", to: "games#instructions", as: :instructions
-  get  "play", to: "games#show", as: :play
+  get  "instructions", to: redirect("/")
+  get  "play", to: redirect("/")
   get  "results/:token", to: "results#show", as: :result
 
   get "leaderboard", to: "leaderboards#show"
   get "leaderboard/live", to: "leaderboards#show", as: :live_leaderboard
   get "leaderboard/today", to: "leaderboards#today", as: :today_leaderboard
   get "leaderboard/conference", to: "leaderboards#conference", as: :conference_leaderboard
+
+  scope "/e/:conference_slug", as: :event, constraints: { conference_slug: /[a-z0-9]+(?:-[a-z0-9]+)*/ } do
+    get "/", to: "pages#home", as: :root
+    get  "register", to: "registrations#new", as: :register
+    post "register", to: "registrations#create"
+    get  "instructions", to: "games#instructions", as: :instructions
+    get  "play", to: "games#show", as: :play
+    get "leaderboard", to: "leaderboards#show", as: :leaderboard
+    get "leaderboard/live", to: "leaderboards#show", as: :live_leaderboard
+    get "leaderboard/today", to: "leaderboards#today", as: :today_leaderboard
+    get "leaderboard/conference", to: "leaderboards#conference", as: :conference_leaderboard
+  end
 
   namespace :admin do
     get    "login",  to: "sessions#new"

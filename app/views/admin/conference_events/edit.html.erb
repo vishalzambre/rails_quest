@@ -1,4 +1,10 @@
 <h1>Edit conference</h1>
 <p class="lede"><%= @event.name %> · <%= @event.scores.count %> saved scores stay on this event.</p>
 
+<label class="play-link">
+  Play link
+  <span>Share this URL. PLAY NOW only appears on this cabinet, and scores stay on <%= @event.name %>.</span>
+  <input type="text" readonly value="<%= @event.play_url %>">
+</label>
+
 <%= render "form", event: @event %>

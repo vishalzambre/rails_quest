@@ -4,7 +4,7 @@
 <% end %>
 
 <main class="cabinet slim">
-  <p class="conf-mark">RailsLand</p>
+  <p class="conf-mark"><%= @game_session.conference_event.name %></p>
   <h1 class="logo small">RUN COMPLETE!</h1>
 
   <% if @score %>
@@ -26,16 +26,17 @@
   <% end %>
 
   <div class="cta-row">
-    <%= link_to "PLAY AGAIN", register_path, class: "btn btn-primary" %>
-    <%= link_to "LEADERBOARD", leaderboard_path, class: "btn btn-ghost" %>
+    <% event = @game_session.conference_event %>
+    <%= link_to "PLAY AGAIN", event_register_path(event.slug), class: "btn btn-primary" %>
+    <%= link_to "LEADERBOARD", event_leaderboard_path(event.slug), class: "btn btn-ghost" %>
     <div class="share-block">
-      <% event = @game_session.conference_event %>
       <% share_text = event.score_share_text(points: format_score(@score&.points)) %>
-      <% twitter_url = event.twitter_share_url(text: share_text, url: leaderboard_url) %>
+      <% play_link = event.play_url %>
+      <% twitter_url = event.twitter_share_url(text: share_text, url: play_link) %>
       <button type="button" class="btn btn-ghost" data-share
               data-title="Rails Runner"
               data-text="<%= share_text %>"
-              data-url="<%= leaderboard_url %>">SHARE SCORE</button>
+              data-url="<%= play_link %>">SHARE SCORE</button>
       <% if twitter_url %>
         <%= link_to "SHARE ON X", twitter_url, class: "btn btn-ghost", target: "_blank", rel: "noopener noreferrer", data: { twitter_share: true } %>
       <% end %>

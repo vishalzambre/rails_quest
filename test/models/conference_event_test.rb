@@ -29,4 +29,9 @@ class ConferenceEventTest < ActiveSupport::TestCase
     event = ConferenceEvent.create!(name: "Goa Ruby Night", location: "Goa")
     assert_equal "goa-ruby-night", event.slug
   end
+
+  test "builds a public play url for the event slug" do
+    @event.update!(slug: "deccan-rails-conf")
+    assert_equal "http://localhost:3000/e/deccan-rails-conf", @event.play_url
+  end
 end

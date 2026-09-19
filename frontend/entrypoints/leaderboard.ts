@@ -17,6 +17,7 @@ if (root) {
   const badge = root.querySelector<HTMLElement>("[data-live-badge]")
   const latestEl = root.querySelector<HTMLElement>("[data-latest]")
   const scope = root.dataset.scope || "live"
+  const eventSlug = root.dataset.event || ""
   const previousRanks = new Map<string, number>()
 
   const escapeHtml = (value: string) =>
@@ -60,7 +61,9 @@ if (root) {
   }
 
   const refresh = async () => {
-    const response = await fetch(`/api/v1/leaderboard?scope=${encodeURIComponent(scope)}`, {
+    const query = new URLSearchParams({ scope })
+    if (eventSlug) query.set("event", eventSlug)
+    const response = await fetch(`/api/v1/leaderboard?${query.toString()}`, {
       headers: { Accept: "application/json" }
     })
     if (!response.ok || !tbody) return
@@ -93,7 +96,7 @@ if (root) {
 
   try {
     const subscription = createConsumer().subscriptions.create(
-      { channel: "LeaderboardChannel", scope },
+      { channel: "LeaderboardChannel", scope, event: eventSlug },
       {
         connected() {
           markLive(true)
