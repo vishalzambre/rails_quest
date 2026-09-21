@@ -9,7 +9,7 @@ gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Pin json 2.x — json 3.0 changes JSON.parse arity and breaks ActiveSupport on Ruby 4.
-gem "json", "~> 2.10"
+gem "json", "~> 3.0"
 
 # Redis for Action Cable, cache, and rate limiting
 gem "redis", "~> 5.4"
