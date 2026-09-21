@@ -64,7 +64,13 @@ RUN npm ci --omit=dev=false
 
 COPY . .
 
-RUN SECRET_KEY_BASE_DUMMY=1 bundle exec vite build && \
+# Propshaft CSS lives in app/assets and must be compiled into public/assets.
+# Without this, production HTML links /assets/application-*.css and Thruster/Rails 404.
+# vite_rails hooks Vite into assets:precompile, so this also builds Phaser.
+RUN SECRET_KEY_BASE_DUMMY=1 \
+    REDIS_URL=redis://127.0.0.1:6379/1 \
+    APP_HOST=https://games.booksparkle.kids \
+    bundle exec rails assets:precompile && \
     SECRET_KEY_BASE_DUMMY=1 bundle exec bootsnap precompile app/ lib/
 
 FROM base AS production

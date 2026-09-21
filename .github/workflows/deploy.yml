@@ -55,4 +55,8 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
         run: |
+          # Accessories are not created by `kamal deploy`. Boot them on first
+          # run; if they already exist, start them instead.
+          bundle exec kamal accessory boot db || bundle exec kamal accessory start db
+          bundle exec kamal accessory boot redis || bundle exec kamal accessory start redis
           bundle exec kamal deploy --version "${GITHUB_SHA::12}"

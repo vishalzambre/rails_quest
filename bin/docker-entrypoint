@@ -17,23 +17,36 @@ if [ "${RAILS_ENV:-development}" != "production" ]; then
   fi
 fi
 
+wait_for_postgres() {
+  local attempts="${1:-60}"
+  local i=1
+  echo "Waiting for PostgreSQL at ${DB_HOST:-DATABASE_URL}..."
+  until pg_isready -q -h "${PG_WAIT_HOST}" -p "${PG_WAIT_PORT}" -U "${PG_WAIT_USER}"; do
+    if [ "$i" -ge "$attempts" ]; then
+      echo "PostgreSQL did not become ready after ${attempts}s at ${PG_WAIT_HOST}:${PG_WAIT_PORT}."
+      echo "Boot the Kamal accessory first: bin/kamal accessory boot db"
+      exit 1
+    fi
+    i=$((i + 1))
+    sleep 1
+  done
+}
+
 if [ -n "${DATABASE_URL:-}" ]; then
-  echo "Waiting for PostgreSQL..."
-  ruby -e '
+  eval "$(ruby -e '
     require "uri"
     uri = URI.parse(ENV.fetch("DATABASE_URL"))
     abort("DATABASE_URL is missing a host") unless uri.host
-    loop do
-      system("pg_isready", "-q", "-h", uri.host, "-p", (uri.port || 5432).to_s, "-U", uri.user || "postgres")
-      break if $?.success?
-      sleep 1
-    end
-  '
+    puts %(PG_WAIT_HOST=#{uri.host})
+    puts %(PG_WAIT_PORT=#{uri.port || 5432})
+    puts %(PG_WAIT_USER=#{uri.user || "postgres"})
+  ')"
+  wait_for_postgres
 elif [ -n "${DB_HOST:-}" ]; then
-  echo "Waiting for PostgreSQL at ${DB_HOST}..."
-  until pg_isready -q -h "${DB_HOST}" -p "${DB_PORT:-5432}" -U "${POSTGRES_USER:-postgres}"; do
-    sleep 1
-  done
+  PG_WAIT_HOST="${DB_HOST}"
+  PG_WAIT_PORT="${DB_PORT:-5432}"
+  PG_WAIT_USER="${POSTGRES_USER:-postgres}"
+  wait_for_postgres
 fi
 
 launching_rails=false

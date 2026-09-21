@@ -158,17 +158,16 @@ Before the first deploy:
 - Copy `.kamal/secrets.example` to `.kamal/secrets` and fill in Docker Hub, `SECRET_KEY_BASE`, Postgres, and admin passwords
 - Confirm the VM security group allows **80** and **443**
 
-First-time setup:
+First-time setup (accessories are **not** started by `kamal deploy`):
 
 ```bash
 cp .kamal/secrets.example .kamal/secrets
-bin/kamal setup
 bin/kamal accessory boot db
 bin/kamal accessory boot redis
-bin/kamal deploy
+bin/kamal setup
 ```
 
-`bin/kamal setup` boots kamal-proxy (already present if BookSparkle is deployed) and the app. Accessories must be booted once so the web container can reach `rails-runner-db` and `rails-runner-redis`.
+`bin/kamal accessory boot db` creates `rails-runner-db` on the kamal Docker network. The web container waits for that hostname before `db:prepare`. GitHub Actions runs the same accessory boot before each deploy.
 
 Regular deploy:
 

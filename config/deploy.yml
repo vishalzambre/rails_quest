@@ -59,10 +59,12 @@ ssh:
   user: ubuntu
 
 # Do not publish accessory ports on the host — BookSparkle already owns 5432.
+# Hostname on the kamal network is `{service}-{accessory}` (rails-runner-db).
 accessories:
   db:
     image: postgres:16
     host: games.booksparkle.kids
+    network: kamal
     env:
       clear:
         POSTGRES_DB: rails_runner_production
@@ -74,6 +76,7 @@ accessories:
   redis:
     image: redis:7-alpine
     host: games.booksparkle.kids
+    network: kamal
     cmd: redis-server --appendonly yes
     directories:
       - data:/data
