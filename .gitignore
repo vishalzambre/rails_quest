@@ -59,3 +59,6 @@ node_modules
 # https://vite.dev/guide/env-and-mode.html#env-files
 *.local
 
+# Kamal secrets — copy from .kamal/secrets.example
+/.kamal/secrets
+

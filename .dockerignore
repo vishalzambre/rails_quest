@@ -1,4 +1,5 @@
 .git
+.kamal/secrets
 log/*
 tmp/*
 node_modules

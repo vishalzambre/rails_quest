@@ -179,8 +179,8 @@ QUESTIONS.each do |prompt, category, difficulty, correct, explanation, answers|
   question.save!
 end
 
-# Development/demo leaderboard rows — clearly marked demo: true. Safe to disable in admin.
-if Player.demo.none?
+# Development/demo leaderboard rows — clearly marked demo: true. Skip on production.
+if !Rails.env.production? && Player.demo.none?
   demo_board = [
     [ "ruby_ninja", "ruby_ninja", "Hydra", 8750 ],
     [ "rails_rockstar", "rails_rockstar", "Deccan Labs", 8420 ],

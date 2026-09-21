@@ -25,7 +25,7 @@ Rails.application.configure do
   config.force_ssl = ENV["DISABLE_SSL"].blank?
 
   # Skip http-to-https redirect for the default health check endpoint.
-  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT with the current request id as a default log tag.
   config.log_tags = [ :request_id ]
@@ -56,11 +56,17 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
+  if (app_host = ENV["APP_HOST"]).present?
+    uri = URI.parse(app_host)
+    if uri.host.present?
+      config.hosts << uri.host
+      config.action_cable.allowed_request_origins = [
+        app_host,
+        %r{\Ahttps?://#{Regexp.escape(uri.host)}(?::\d+)?\z}
+      ]
+    end
+  end
+
   # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

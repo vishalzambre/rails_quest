@@ -57,7 +57,7 @@ docker compose down
 | `ADMIN_USERNAME` / `ADMIN_PASSWORD` | Admin cabinet login (default `admin` / `changeme`) |
 | `APP_HOST` | Public URL used in share copy |
 | `CONFERENCE_SLUG` | Default event for `/` and `/leaderboard`. Play starts from `/e/:slug` |
-| `SEED_ON_BOOT` | `true` runs idempotent seeds when the web container starts |
+| `SEED_ON_BOOT` | `true` runs idempotent seeds when the web container starts (questions and event; demo leaderboard rows are development-only) |
 
 See `.env.example`.
 
@@ -148,11 +148,53 @@ Placeholder sprites are generated at runtime in `frontend/game/assets/pixelArt.t
 
 Audio is generated with the Web Audio API after the first tap (mobile autoplay rules). Mute is on-screen.
 
-## Deployment
+## Deployment (Kamal)
 
-The `Dockerfile` has a `production` target (Rails + built Vite assets + Thruster). Run it with managed PostgreSQL and Redis, and set `DATABASE_URL`, `REDIS_URL`, `SECRET_KEY_BASE`, `ADMIN_PASSWORD`, `APP_HOST`, and `CONFERENCE_SLUG`.
+Production shares the BookSparkle VM (`13.201.27.199`) and is served at **https://games.booksparkle.kids**. Postgres and Redis run as separate Kamal accessories so they do not collide with `booksparkle-db` on host port 5432.
 
-QR codes should point at the public origin (for example `https://game.deccanrailsconf.com`). There is no attendee login.
+Before the first deploy:
+
+- Point a DNS **A** record for `games.booksparkle.kids` at `13.201.27.199`
+- Copy `.kamal/secrets.example` to `.kamal/secrets` and fill in Docker Hub, `SECRET_KEY_BASE`, Postgres, and admin passwords
+- Confirm the VM security group allows **80** and **443**
+
+First-time setup:
+
+```bash
+cp .kamal/secrets.example .kamal/secrets
+bin/kamal setup
+bin/kamal accessory boot db
+bin/kamal accessory boot redis
+bin/kamal deploy
+```
+
+`bin/kamal setup` boots kamal-proxy (already present if BookSparkle is deployed) and the app. Accessories must be booted once so the web container can reach `rails-runner-db` and `rails-runner-redis`.
+
+Regular deploy:
+
+```bash
+bin/kamal deploy
+```
+
+Useful commands:
+
+```bash
+bin/kamal logs
+bin/kamal console
+bin/kamal accessory logs db
+bin/kamal accessory logs redis
+bin/kamal rollback
+```
+
+Health checks:
+
+```bash
+curl -I https://games.booksparkle.kids/up
+```
+
+Play URLs are event-scoped, for example `https://games.booksparkle.kids/e/deccan-rails-conf`. There is no attendee login. QR codes should use that origin.
+
+The production image target is the last stage in `Dockerfile` (Rails + built Vite assets + Thruster on port 80).
 
 ## Game loop
 

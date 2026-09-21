@@ -15,4 +15,12 @@ test:
 
 production:
   <<: *default
+  <% if ENV["DATABASE_URL"].present? %>
   url: <%= ENV["DATABASE_URL"] %>
+  <% else %>
+  database: <%= ENV.fetch("POSTGRES_DB") { "rails_runner_production" } %>
+  username: <%= ENV.fetch("POSTGRES_USER") { "rails_runner" } %>
+  password: <%= ENV["RAILS_RUNNER_DATABASE_PASSWORD"] || ENV["POSTGRES_PASSWORD"] %>
+  host: <%= ENV.fetch("DB_HOST") { "localhost" } %>
+  port: <%= ENV.fetch("DB_PORT") { 5432 } %>
+  <% end %>

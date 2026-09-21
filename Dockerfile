@@ -77,6 +77,7 @@ ENV RAILS_ENV=production \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
 
-EXPOSE 3000
+# Thruster terminates HTTP on 80 and forwards to Puma. kamal-proxy app_port is 80.
+EXPOSE 80
 ENTRYPOINT ["./bin/docker-entrypoint"]
-CMD ["./bin/thrust", "./bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["./bin/thrust", "./bin/rails", "server"]

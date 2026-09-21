@@ -7,12 +7,14 @@ if [ -f tmp/pids/server.pid ]; then
   rm -f tmp/pids/server.pid
 fi
 
-if [ -f Gemfile ]; then
-  bundle check >/dev/null 2>&1 || bundle install
-fi
+if [ "${RAILS_ENV:-development}" != "production" ]; then
+  if [ -f Gemfile ]; then
+    bundle check >/dev/null 2>&1 || bundle install
+  fi
 
-if [ -f package.json ]; then
-  npm install --no-fund --no-audit
+  if [ -f package.json ]; then
+    npm install --no-fund --no-audit
+  fi
 fi
 
 if [ -n "${DATABASE_URL:-}" ]; then
@@ -27,15 +29,29 @@ if [ -n "${DATABASE_URL:-}" ]; then
       sleep 1
     end
   '
+elif [ -n "${DB_HOST:-}" ]; then
+  echo "Waiting for PostgreSQL at ${DB_HOST}..."
+  until pg_isready -q -h "${DB_HOST}" -p "${DB_PORT:-5432}" -U "${POSTGRES_USER:-postgres}"; do
+    sleep 1
+  done
 fi
 
+launching_rails=false
 if [ "${1:-}" = "./bin/dev" ] || [ "${1:-}" = "bin/dev" ] || [ "${1:-}" = "./bin/rails" ] || [ "${1:-}" = "bin/rails" ]; then
-  bundle exec rails db:prepare
+  launching_rails=true
+fi
+# Kamal production: ./bin/thrust ./bin/rails server
+if [ "$#" -ge 2 ] && [ "${@: -2:1}" = "./bin/rails" ] && [ "${@: -1:1}" = "server" ]; then
+  launching_rails=true
+fi
+
+if [ "$launching_rails" = true ]; then
+  ./bin/rails db:prepare
   if [ "${RAILS_ENV:-development}" != "production" ]; then
     bundle exec rails db:test:prepare >/dev/null 2>&1 || true
   fi
-  if [ "${SEED_ON_BOOT:-false}" = "true" ] && [ "${RAILS_ENV:-development}" = "development" ]; then
-    bundle exec rails db:seed || echo "Seed failed (will retry on next boot)"
+  if [ "${SEED_ON_BOOT:-false}" = "true" ]; then
+    ./bin/rails db:seed || echo "Seed failed (will retry on next boot)"
   fi
 fi
 
