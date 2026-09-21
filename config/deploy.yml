@@ -7,7 +7,7 @@ image: vishalzambre/rails-runner
 
 servers:
   web:
-    - 13.201.27.199
+    - games.booksparkle.kids
 
 # kamal-proxy already terminates SSL for booksparkle.kids on this host.
 # A second host on the same proxy is how both apps share ports 80/443.
@@ -62,7 +62,7 @@ ssh:
 accessories:
   db:
     image: postgres:16
-    host: 13.201.27.199
+    host: games.booksparkle.kids
     env:
       clear:
         POSTGRES_DB: rails_runner_production
@@ -73,7 +73,7 @@ accessories:
       - data:/var/lib/postgresql/data
   redis:
     image: redis:7-alpine
-    host: 13.201.27.199
+    host: games.booksparkle.kids
     cmd: redis-server --appendonly yes
     directories:
       - data:/data
