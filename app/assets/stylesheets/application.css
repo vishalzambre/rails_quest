@@ -283,6 +283,10 @@ h1, h2, .logo { font-family: var(--font-pixel); }
 .register-form .btn { margin-top: 0.15rem; }
 
 body.games-show .scanlines { display: none; }
+body.games-show {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
 #rails-runner {
   min-height: 100dvh;
   display: grid;
@@ -291,6 +295,35 @@ body.games-show .scanlines { display: none; }
   position: relative;
 }
 #game-root { width: min(100vw, 960px); height: min(100dvh, 540px); }
+#game-root canvas { display: block; }
+@media (orientation: landscape) and (hover: none) {
+  html, body.games-show { height: 100dvh; }
+  #rails-runner {
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+  #game-root {
+    width: 100vw;
+    height: 100dvh;
+  }
+}
+#rails-runner:fullscreen,
+#rails-runner:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background: #000;
+}
+#rails-runner:fullscreen #game-root,
+#rails-runner:-webkit-full-screen #game-root {
+  width: 100%;
+  height: 100%;
+}
+#rails-runner:fullscreen .rotate-hint,
+#rails-runner:-webkit-full-screen .rotate-hint {
+  display: none;
+}
 .touch-controls {
   position: fixed;
   left: 0; right: 0; bottom: 0;
@@ -333,11 +366,15 @@ body.games-show .scanlines { display: none; }
     font-size: 0.58rem;
   }
 }
-.mute-btn {
+.play-chrome {
   position: fixed;
   top: calc(0.6rem + env(safe-area-inset-top));
-  right: 0.6rem;
+  right: calc(0.6rem + env(safe-area-inset-right));
   z-index: 6;
+  display: flex;
+  gap: 0.4rem;
+}
+.chrome-btn {
   min-height: 44px;
   padding: 0.5rem 0.7rem;
   font-family: var(--font-pixel);
@@ -446,6 +483,7 @@ body.admin { background: #11151c; color: #ece7da; font-family: var(--font-ui); }
 /* Landscape phones are often 800px+ wide, so hide pads by pointer, not viewport width. */
 @media (hover: hover) and (pointer: fine) {
   .touch-controls { display: none; }
+  [data-fullscreen] { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -20,6 +20,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".touch-controls [data-control=left]", "LEFT"
     assert_select ".touch-controls [data-control=right]", "RIGHT"
     assert_select ".touch-controls [data-control=jump]", "JUMP"
+    assert_select "[data-fullscreen]", "FULL"
+    assert_select "[data-mute]", "MUTE"
   end
 
   test "a session from another event cannot open this cabinet" do

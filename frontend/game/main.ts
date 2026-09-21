@@ -7,6 +7,10 @@ import type { GameBootstrap } from "./types"
 import { GAME_HEIGHT, GAME_WIDTH } from "./types"
 
 export const createGame = (parent: HTMLElement, bootstrap: GameBootstrap) => {
+  const fullscreenTarget = parent.closest("#rails-runner") instanceof HTMLElement
+    ? parent.closest("#rails-runner") as HTMLElement
+    : parent
+
   const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent,
@@ -18,7 +22,9 @@ export const createGame = (parent: HTMLElement, bootstrap: GameBootstrap) => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
       width: GAME_WIDTH,
-      height: GAME_HEIGHT
+      height: GAME_HEIGHT,
+      fullscreenTarget,
+      expandParent: false
     },
     physics: {
       default: "arcade",
