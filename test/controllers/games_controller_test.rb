@@ -17,6 +17,9 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get event_play_url(@event.slug)
     assert_response :success
     assert_select "#rails-runner"
+    assert_select ".touch-controls [data-control=left]", "LEFT"
+    assert_select ".touch-controls [data-control=right]", "RIGHT"
+    assert_select ".touch-controls [data-control=jump]", "JUMP"
   end
 
   test "a session from another event cannot open this cabinet" do

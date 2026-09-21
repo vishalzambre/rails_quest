@@ -294,21 +294,45 @@ body.games-show .scanlines { display: none; }
 .touch-controls {
   position: fixed;
   left: 0; right: 0; bottom: 0;
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   gap: 0.5rem;
   padding: 0.6rem calc(0.6rem + env(safe-area-inset-right)) calc(0.7rem + env(safe-area-inset-bottom)) calc(0.6rem + env(safe-area-inset-left));
   z-index: 5;
+  pointer-events: none;
+}
+.move-pads {
+  display: flex;
+  gap: 0.5rem;
 }
 .pad {
+  pointer-events: auto;
   min-height: 64px;
+  min-width: 5.2rem;
+  padding: 0 0.65rem;
   font-family: var(--font-pixel);
   font-size: 0.7rem;
   color: var(--cream);
   background: rgba(23, 32, 56, 0.88);
   border: 4px solid #000;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.pad.jump { background: rgba(204, 52, 45, 0.92); }
+.pad.jump {
+  background: rgba(204, 52, 45, 0.92);
+  min-width: 6.4rem;
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .touch-controls {
+    padding: 0.35rem calc(0.7rem + env(safe-area-inset-right)) calc(0.4rem + env(safe-area-inset-bottom)) calc(0.7rem + env(safe-area-inset-left));
+  }
+  .pad {
+    min-height: 52px;
+    font-size: 0.58rem;
+  }
+}
 .mute-btn {
   position: fixed;
   top: calc(0.6rem + env(safe-area-inset-top));
@@ -413,11 +437,15 @@ body.admin { background: #11151c; color: #ece7da; font-family: var(--font-ui); }
 @keyframes pulse { 50% { opacity: 0.35; } }
 
 @media (min-width: 720px) {
-  .touch-controls { display: none; }
   .cta-row { grid-template-columns: 1fr 1fr; }
   .share-block { grid-column: 1 / -1; }
   .share-block:has([data-twitter-share]) { grid-template-columns: 1fr 1fr; }
   .share-fallback { grid-column: 1 / -1; }
+}
+
+/* Landscape phones are often 800px+ wide, so hide pads by pointer, not viewport width. */
+@media (hover: hover) and (pointer: fine) {
+  .touch-controls { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
